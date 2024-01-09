@@ -1,5 +1,6 @@
 import { Component } from "react";
 import css from './App.module.css';
+
 import { PhonebookForm } from "./Form.jsx/PhonebookForm";
 import {Contacts} from "./Contacts/Contacts";
 import { Filter } from "./Filter/Filter";
@@ -9,6 +10,18 @@ export class App extends Component {
   state = {
     contacts: [],
     filter: '',
+  }
+
+  componentDidMount() {
+    console.log("Mount:", this.state.contacts)
+    if (localStorage.getItem('phonebook')) {
+      this.setState({contacts: JSON.parse(localStorage.getItem('phonebook'))})
+    }
+  }
+  
+  componentDidUpdate() {
+    localStorage.setItem("phonebook", JSON.stringify(this.state.contacts))
+    console.log("Upd:", this.state.contacts)
   }
 
   addUser = (formData => {
@@ -32,9 +45,7 @@ export class App extends Component {
 
   handleDelete = (name) => {
     this.setState({contacts: this.state.contacts.filter(contact => contact.name !== name)})
-    
   }
-
   
   render() {
 
